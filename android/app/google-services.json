@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1024893978803",
+    "project_id": "kat-chat-21ded",
+    "storage_bucket": "kat-chat-21ded.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024893978803:android:351d7c42d1f74a019008c6",
+        "android_client_info": {
+          "package_name": "com.example.kat_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_RU421n6As9MfjJaL5auQou05q22KBy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
