@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
@@ -47,19 +47,17 @@ class _LoginPageState extends State<LoginPage> {
                   WavyAnimatedText('KAT CHAT',
                       textStyle: GoogleFonts.getFont(
                         'Raleway',
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                             fontSize: 50,
                             color: Color.fromARGB(255, 236, 246, 237),
                             fontWeight: FontWeight.bold),
                       )),
                 ],
                 isRepeatingAnimation: true,
-                onTap: () {
-                  print("Tap Event");
-                },
+                onTap: () {},
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             RegistrationWidget(

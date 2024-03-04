@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kat_chat/pages/chat/chat.dart';
 import 'package:kat_chat/pages/sing_in/sign_in.dart';
@@ -10,7 +11,13 @@ class SignUp extends StatefulWidget {
   State<SignUp> createState() => _SignUpState();
 }
 
-String userText = '';
+String? userName, email, password;
+Future<void> addUser() async {
+  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    email: email!,
+    password: password!,
+  );
+}
 
 class _SignUpState extends State<SignUp> {
   @override
@@ -20,7 +27,7 @@ class _SignUpState extends State<SignUp> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             "Let's Get Started!",
             style: TextStyle(
               fontSize: 30,
@@ -28,13 +35,13 @@ class _SignUpState extends State<SignUp> {
               color: Colors.blue,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           SignUpWidget(
             labelText: 'Name',
-            onChanged: (name) {
-              userText = name;
+            onChanged: (userText) {
+              userName = userText;
             },
             labelIcon: Icons.person,
           ),
@@ -43,8 +50,8 @@ class _SignUpState extends State<SignUp> {
           ),
           SignUpWidget(
             labelText: 'Email',
-            onChanged: (email) {
-              userText = email;
+            onChanged: (userText) {
+              email = userText;
             },
             labelIcon: Icons.email,
           ),
@@ -53,8 +60,8 @@ class _SignUpState extends State<SignUp> {
           ),
           SignUpWidget(
             labelText: 'Password',
-            onChanged: (password) {
-              userText = password;
+            onChanged: (userText) {
+              password = userText;
             },
             labelIcon: Icons.password,
           ),
@@ -64,7 +71,7 @@ class _SignUpState extends State<SignUp> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Already have an account?"),
+              const Text("Already have an account?"),
               TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -72,7 +79,7 @@ class _SignUpState extends State<SignUp> {
                         MaterialPageRoute(
                             builder: (context) => const SignIn()));
                   },
-                  child: Text(
+                  child: const Text(
                     "Sign In",
                     style: TextStyle(
                       color: Colors.blue,
@@ -92,6 +99,7 @@ class _SignUpState extends State<SignUp> {
             ),
             child: ElevatedButton(
               onPressed: () {
+                addUser();
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const Chat()));
               },
@@ -102,7 +110,7 @@ class _SignUpState extends State<SignUp> {
                   borderRadius: BorderRadius.circular(50),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 "CREATE",
                 style: TextStyle(
                   fontSize: 20,

@@ -27,13 +27,13 @@ class _ChatState extends State<Chat> {
                 labelText: "Type a message",
                 suffixIcon: IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                 ),
                 border: InputBorder.none,
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           )
         ],

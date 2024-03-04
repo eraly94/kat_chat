@@ -19,7 +19,7 @@ class _SignInState extends State<SignIn> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             "Welcome Back!",
             style: TextStyle(
               fontSize: 30,
@@ -27,7 +27,7 @@ class _SignInState extends State<SignIn> {
               color: Colors.blue,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           SignUpWidget(
@@ -63,7 +63,7 @@ class _SignInState extends State<SignIn> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Don't have an account?"),
+              const Text("Don't have an account?"),
               TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -71,7 +71,7 @@ class _SignInState extends State<SignIn> {
                         MaterialPageRoute(
                             builder: (context) => const SignUp()));
                   },
-                  child: Text(
+                  child: const Text(
                     "Sign Up",
                     style: TextStyle(
                       color: Colors.blue,
@@ -98,7 +98,7 @@ class _SignInState extends State<SignIn> {
                   borderRadius: BorderRadius.circular(50),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 "SING IN",
                 style: TextStyle(
                   fontSize: 20,
