@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kat_chat/pages/chat/chat.dart';
 import 'package:kat_chat/pages/sign_up/sign_up.dart';
 import '../../widgets/sign_up_widget.dart';
 
@@ -9,7 +11,27 @@ class SignIn extends StatefulWidget {
   State<SignIn> createState() => _SignInState();
 }
 
-String userText = '';
+//String userText = '';
+String? userName, email, password;
+
+signIn(BuildContext context) async {
+  try {
+    final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email!,
+      password: password!,
+    );
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Chat(
+              name: credential.user!.displayName,
+            )));
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'user-not-found') {
+      print('No user found for that email.');
+    } else if (e.code == 'wrong-password') {
+      print('Wrong password provided for that user.');
+    }
+  }
+}
 
 class _SignInState extends State<SignIn> {
   @override
@@ -31,19 +53,9 @@ class _SignInState extends State<SignIn> {
             height: 50,
           ),
           SignUpWidget(
-            labelText: 'Name',
-            onChanged: (name) {
-              userText = name;
-            },
-            labelIcon: Icons.person,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SignUpWidget(
             labelText: 'Email',
             onChanged: (email) {
-              userText = email;
+              email = email;
             },
             labelIcon: Icons.email,
           ),
@@ -53,7 +65,7 @@ class _SignInState extends State<SignIn> {
           SignUpWidget(
             labelText: 'Password',
             onChanged: (password) {
-              userText = password;
+              password = password;
             },
             labelIcon: Icons.password,
           ),
@@ -90,7 +102,9 @@ class _SignInState extends State<SignIn> {
               borderRadius: BorderRadius.circular(50),
             ),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                signIn(context);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 elevation: 0,
