@@ -1,8 +1,9 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kat_chat/models/user_model.dart';
 import 'package:kat_chat/pages/chat/chat.dart';
 import 'package:kat_chat/pages/sing_in/sign_in.dart';
 import '../../widgets/sign_up_widget.dart';
@@ -12,6 +13,16 @@ class SignUp extends StatefulWidget {
 
   @override
   State<SignUp> createState() => _SignUpState();
+}
+
+Future<void> createUser(
+    BuildContext context, UserCredential userCredential) async {
+  final usermodel =
+      UserModel(name: userName, email: email, id: userCredential.user!.uid);
+  users.doc(userCredential.user!.uid).set(usermodel.toMap()).then((_) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Chat(userModelData: usermodel)));
+  });
 }
 
 String? userName, email, password;
@@ -25,33 +36,20 @@ Future<void> addUser(BuildContext context) async {
       password: password!,
     );
 
-    createUser(userCredential);
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Chat(
-              name: userName,
-            )));
+    createUser(
+      context,
+      userCredential,
+    );
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
-      print('The password provided is too weak.');
+      log('The password provided is too weak.');
     } else if (e.code == 'email-already-in-use') {
-      print('The account already exists for that email.');
+      log('The account already exists for that email.');
     }
   } catch (e) {
     print(e);
     throw (e);
   }
-}
-
-Future<void> createUser(UserCredential userCredential) async {
-  users
-      .doc(userCredential.user!.uid)
-      .set({
-        "name": userName,
-        "email": email,
-        "id": userCredential.user!.uid,
-      })
-      .then((value) => print("User Added"))
-      .catchError((error) => print("Failed to add user: $error"));
 }
 
 class _SignUpState extends State<SignUp> {

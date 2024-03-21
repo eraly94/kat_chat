@@ -7,11 +7,11 @@ class SignUpWidget extends StatelessWidget {
   final IconData labelIcon;
 
   SignUpWidget({
-    Key? key,
+    super.key,
     required this.labelText,
     required this.onChanged,
     required this.labelIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

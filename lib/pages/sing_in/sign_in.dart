@@ -1,5 +1,9 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kat_chat/models/user_model.dart';
 import 'package:kat_chat/pages/chat/chat.dart';
 import 'package:kat_chat/pages/sign_up/sign_up.dart';
 import '../../widgets/sign_up_widget.dart';
@@ -11,29 +15,60 @@ class SignIn extends StatefulWidget {
   State<SignIn> createState() => _SignInState();
 }
 
-//String userText = '';
-String? userName, email, password;
+class _SignInState extends State<SignIn> {
+  String? email, password;
 
-signIn(BuildContext context) async {
-  try {
-    final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email!,
-      password: password!,
-    );
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Chat(
-              name: credential.user!.displayName,
-            )));
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'user-not-found') {
-      print('No user found for that email.');
-    } else if (e.code == 'wrong-password') {
-      print('Wrong password provided for that user.');
+//  Future <void> signIn() async {
+//   try {
+
+//   }
+//     {
+//       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+//         email: email!,
+//         password: password!,
+//       );
+//       log("user: $credential");
+//       final chats = FirebaseFirestore.instance.collection('chats');
+//       final usermodel =
+//           UserModel(name: "", email: email!, id: credential.user!.uid);
+//       Navigator.of(context).push(MaterialPageRoute(
+//           builder: (context) => Chat(
+//                 userModelData: usermodel,
+//               )));
+//     }
+//   }
+
+  Future<void> signIn() async {
+    try {
+      final userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email!,
+        password: password!,
+      );
+      final userModel = UserModel(
+        id: userCredential.user!.uid,
+        email: email!,
+        name: userCredential.user!.displayName!,
+      );
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Chat(
+                    userModelData: userModel,
+                  )));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        log('No user found for that email.');
+      } else if (e.code != e.email) {
+        log('Email not found');
+      } else if (e.code == 'wrong-password') {
+        log('Wrong password provided for that user.');
+      }
+    } catch (e) {
+      log('$e');
     }
   }
-}
 
-class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,8 +89,10 @@ class _SignInState extends State<SignIn> {
           ),
           SignUpWidget(
             labelText: 'Email',
-            onChanged: (email) {
-              email = email;
+            onChanged: (value) {
+              setState(() {
+                email = value;
+              });
             },
             labelIcon: Icons.email,
           ),
@@ -64,8 +101,10 @@ class _SignInState extends State<SignIn> {
           ),
           SignUpWidget(
             labelText: 'Password',
-            onChanged: (password) {
-              password = password;
+            onChanged: (value) {
+              setState(() {
+                password = value;
+              });
             },
             labelIcon: Icons.password,
           ),
@@ -103,7 +142,7 @@ class _SignInState extends State<SignIn> {
             ),
             child: ElevatedButton(
               onPressed: () {
-                signIn(context);
+                signIn();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
